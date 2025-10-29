@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Snooker Frame</h2>
+
+<div>
+    <h3>Player 1</h3>
+    <div>Score: <span id="score1">0</span></div>
+</div>
+
+<div>
+    <h3>Player 2</h3>
+    <div>Score: <span id="score2">0</span></div>
+</div>
+
+<div>
+    <h3>Current break</h3>
+    <div>Player: <span id="currentPlayer">1</span></div>
+    <div>Break: <span id="currentBreak">0</span></div>
+</div>
+
+<p>Reds remaining: <span id="redsRemaining"></span></p>
+
+<p>
+    <button data-value="1">Red (1)</button>
+</p>
+<form id="nominate-form" onsubmit="return false;">
+<table>
+    <tr>
+        <th>Colour</th>
+        <td><button data-value="2">Yellow (2)</button></td>
+        <td><button data-value="3">Green (3)</button></td>
+        <td><button data-value="4">Brown (4)</button></td>
+        <td><button data-value="5">Blue (5)</button></td>
+        <td><button data-value="6">Pink (6)</button></td>
+        <td><button data-value="7">Black (7)</button></td>
+    </tr>
+    <tr>
+        <th>Nomination</th>
+        <td><label>Yellow <input type="radio" name="nominate" value="2"></label></td>
+        <td><label>Green <input type="radio" name="nominate" value="3"></label></td>
+        <td><label>Brown <input type="radio" name="nominate" value="4"></label></td>
+        <td><label>Blue <input type="radio" name="nominate" value="5"></label></td>
+        <td><label>Pink <input type="radio" name="nominate" value="6"></label></td>
+        <td><label>Black <input type="radio" name="nominate" value="7"></label></td>
+    </tr>
+</table>
+</form>
+
+<p>
+    <button id="foul-cue">Cue Ball Potted/Miss</button>
+    <button id="end-turn">End Turn (Legal)</button>
+</p>
+
+<script>
+    const game = function() {
+        let _isRedOn = true;
+        let _redsRemaining = 15;
+        let _isEndgame = false;
+
+        let _currentPlayer = 1;
+        let _currentBreak = 0;
+        const _getOtherPlayer = () => 3 - _currentPlayer;
+
+        const _score = { 1: 0, 2: 0 };
+
+        const Colours = Object.freeze({
+            White: 0,
+            Red: 1,
+            Yellow: 2,
+            Green: 3,
+            Brown: 4,
+            Blue: 5,
+            Pink: 6,
+            Black: 7,
+        });
+
+        let _lowestColourOnTable = Colours.Yellow;
+        let _nominatedColour = 0;
+
+        const nominateColour = colour => _nominatedColour = colour;
+        const endTurn = () => {
+            _score[_currentPlayer] += _currentBreak;
+            _currentBreak = 0;
+            _currentPlayer = _getOtherPlayer();
+
+            _isRedOn = _redsRemaining > 0;
+            _isEndgame = _redsRemaining === 0;
+
+            if (_isEndgame) {
+                nominateColour(_lowestColourOnTable);
+            } else {
+                _nominatedColour = 0;
+            }
+        };
+
+        return {
+            Colours,
+            getCurrentPlayer: () => _currentPlayer,
+            endTurn,
+            nominateColour,
+            getNominatedColour: () => _nominatedColour,
+            pot: value => {
+                if (value === Colours.White) {
+                    if (_isRedOn) {
+                        if (confirm("Cue ball potted or miss?")) {
+                            _score[_getOtherPlayer()] += 4;
+                            endTurn();
+                            return true;
+                        }
+                    } else {
+                        if (_nominatedColour) {
+                            if (confirm("Cue ball potted or miss?")) {
+                                _score[_getOtherPlayer()] += Math.max(4, _nominatedColour);
+                                endTurn();
+                                return true;
+                            }
+                        } else {
+                            alert(`Must nominate colour first.`);
+                        }
+                    }
+
+                    return false;
+                }
+
+                if (_isRedOn) {
+                    if (value === Colours.Red) {
+                        _currentBreak += 1;
+                        _redsRemaining--;
+                        _isRedOn = false;
+                    } else {
+                        const colour = Object.entries(Colours).find(([_, val]) => val === value)[0];
+                        if (!confirm(`Foul: ${colour}?`)) {
+                            return false;
+                        }
+                        _score[_getOtherPlayer()] += Math.max(4, value);
+                        endTurn();
+                    }
+                } else {
+                    if (!_nominatedColour) {
+                        alert(`Must nominate colour first.`);
+                        return false;
+                    }
+
+                    if (value === _nominatedColour) {
+                        _currentBreak += value;
+
+                        if (_isEndgame) {
+                            _lowestColourOnTable++;
+                            nominateColour(_lowestColourOnTable);
+                        } else {
+                            _isEndgame = _redsRemaining === 0;
+
+                            if (_isEndgame) {
+                                nominateColour(Colours.Yellow);
+                            } else {
+                                _nominatedColour = 0;
+                                _isRedOn = true;
+                            }
+                        }
+                    } else {
+                        const [pottedCol, pottedVal] = Object.entries(Colours).find(([_, val]) => val === value);
+                        if (!confirm(`Foul: ${pottedCol}?`)) {
+                            return false;
+                        }
+                        _score[_getOtherPlayer()] += Math.max(4, _nominatedColour, pottedVal);
+                        endTurn();
+                    }
+                }
+
+                return true;
+            },
+            getRedsRemaining: () => _redsRemaining,
+            scores: {
+                p1: () => _score[1],
+                p2: () => _score[2],
+                break: () => _currentBreak,
+            },
+        };
+    }();
+
+    const nominateForm = document.getElementById(`nominate-form`);
+
+    updateDisplay();
+
+
+    // Ball buttons
+    document.querySelectorAll('button[data-value]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const value = parseInt(btn.dataset.value);
+
+            if (game.pot(value)) updateDisplay();
+        });
+    });
+
+    // Colour nomination buttons
+    document.querySelectorAll(`input[type=radio]`).forEach(inp => {
+        inp.addEventListener(`change`, () => {
+            const value = parseInt(inp.value);
+            game.nominateColour(value);
+        });
+    });
+
+    // Cue ball potted/miss
+    document.getElementById('foul-cue').addEventListener('click', () => {
+        if (game.pot(game.Colours.White)) updateDisplay();
+    });
+
+    // End turn after legal shot
+    document.getElementById('end-turn').addEventListener('click', () => {
+        game.endTurn();
+        updateDisplay();
+    });
+
+
+    function updateDisplay() {
+        document.getElementById('score1').textContent = game.scores.p1();
+        document.getElementById('score2').textContent = game.scores.p2();
+        document.getElementById('currentPlayer').textContent = game.getCurrentPlayer();
+        document.getElementById('currentBreak').textContent = game.scores.break();
+        document.getElementById('redsRemaining').textContent = game.getRedsRemaining();
+
+        const nominatedColour = game.getNominatedColour();
+        if (nominatedColour) {
+            nominateForm.nominate.value = nominatedColour;
+        } else {
+            nominateForm.nominate.forEach(inp => inp.checked = false);
+        }
+    }
+</script>
+</body>
+</html>
