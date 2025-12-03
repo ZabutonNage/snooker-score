@@ -30,6 +30,32 @@
             width: 100%;
         }
     </style>
+    <script>
+        // Wake lock handling.
+
+        let wakeLock = undefined;
+
+        async function requestWakeLock() {
+            try {
+                wakeLock = await navigator.wakeLock.request(`screen`);
+
+                wakeLock.addEventListener(`release`, () => {
+                    wakeLock = undefined;
+                });
+            } catch (err) {
+                console.error(`Wake lock request failed: ${err.name}, ${err.message}`);
+            }
+        }
+
+        // Reacquire wake lock when tab becomes visible again
+        document.addEventListener(`visibilitychange`, async () => {
+            if (!wakeLock && document.visibilityState === `visible`) {
+                await requestWakeLock();
+            }
+        });
+
+        requestWakeLock();
+    </script>
 </head>
 <body>
 
