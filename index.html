@@ -5,16 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Snooker Score</title>
     <style>
+
+        :root {
+            --col-bg-main: #050908;
+            --col-bg-score: #F9E431;
+            --col-text-main: #eee;
+            --col-text-score: var(--col-bg-main);
+        }
+
         body {
             font-family: sans-serif;
+            margin: 0;
         }
         #scoreboard {
             display: flex;
             justify-content: space-between;
             margin-bottom: 3rem;
+            color: var(--col-text-main);
+            background-color: var(--col-bg-main);
+            font-size: 1.2em;
+            line-height: 1.5;
+            padding: 4px 0;
         }
         .turn-marker {
             visibility: hidden;
+            width: 0;
+            height: 0;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            align-self: center;
+        }
+        #scoreboard #turn-marker-1 {
+            margin-left: 6px;
+            border-left: 24px solid yellow;
+        }
+        #scoreboard #turn-marker-2 {
+            margin-right: 6px;
+            border-right: 24px solid yellow;
         }
         #scoreboard.p1-strikes #turn-marker-1 {
             visibility: visible;
@@ -22,8 +49,27 @@
         #scoreboard.p2-strikes #turn-marker-2 {
             visibility: visible;
         }
+        #scoreboard input {
+            color: var(--col-text-main);
+            background-color: var(--col-bg-main);
+            font-weight: bold;
+        }
+        .sb-player-score {
+            color: var(--col-text-score);
+            background-color: var(--col-bg-score);
+            width: 3em;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 2px;
+        }
         #p2-name {
             text-align: right;
+        }
+        #score-current-break {
+            font-size: 1rem;
+            width: 2.5em;
+            text-align: center;
+            align-self: center;
         }
 
         table {
@@ -62,13 +108,13 @@
 <div id="scoreboard" class="p1-strikes">
     <!-- Alternatively, "p2-strikes" -->
 
-    <span id="turn-marker-1" class="turn-marker">=>></span>
+    <span id="turn-marker-1" class="turn-marker"></span>
     <input type="text" value="Player 1"/>
-    <span id="score1">0</span>
-    <span>(<span id="currentBreak">0</span>)</span>
-    <span id="score2">0</span>
+    <span id="score1" class="sb-player-score">0</span>
+    <span id="score-current-break">(<span id="currentBreak">0</span>)</span>
+    <span id="score2" class="sb-player-score">0</span>
     <input type="text" value="Player 2" id="p2-name"/>
-    <span id="turn-marker-2" class="turn-marker"><<=</span>
+    <span id="turn-marker-2" class="turn-marker"></span>
 </div>
 
 <p>Reds remaining: <span id="redsRemaining"></span></p>
