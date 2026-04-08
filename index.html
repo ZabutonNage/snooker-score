@@ -75,6 +75,10 @@
         table {
             width: 100%;
         }
+
+        #end-turn {
+            padding: .5em 4em;
+        }
     </style>
     <script>
         // Wake lock handling.
@@ -117,39 +121,56 @@
     <span id="turn-marker-2" class="turn-marker"></span>
 </div>
 
-<p>Reds remaining: <span id="redsRemaining"></span></p>
+<div id="controls">
 
-<p>
-    <button data-value="1">Red (1)</button>
-</p>
-<form id="nominate-form" onsubmit="return false;">
-<table>
-    <tr>
-        <th>Colour</th>
-        <td><button data-value="2">Yellow (2)</button></td>
-        <td><button data-value="3">Green (3)</button></td>
-        <td><button data-value="4">Brown (4)</button></td>
-        <td><button data-value="5">Blue (5)</button></td>
-        <td><button data-value="6">Pink (6)</button></td>
-        <td><button data-value="7">Black (7)</button></td>
-    </tr>
-    <tr>
-        <th>Nomination</th>
-        <td><label>Yellow <input type="radio" name="nominate" value="2"></label></td>
-        <td><label>Green <input type="radio" name="nominate" value="3"></label></td>
-        <td><label>Brown <input type="radio" name="nominate" value="4"></label></td>
-        <td><label>Blue <input type="radio" name="nominate" value="5"></label></td>
-        <td><label>Pink <input type="radio" name="nominate" value="6"></label></td>
-        <td><label>Black <input type="radio" name="nominate" value="7"></label></td>
-    </tr>
-</table>
-</form>
+    <p>Reds remaining: <span id="redsRemaining"></span></p>
 
-<p>
-    <button id="foul-cue">Cue Ball Potted/Miss</button>
-    <button id="end-turn">End Turn (Legal)</button>
-</p>
+    <p>
+        <button data-value="1">Red (1)</button>
+    </p>
+    <form id="nominate-form" onsubmit="return false;">
+        <table>
+            <tr>
+                <th>Colour</th>
+                <td>
+                    <button data-value="2">Yellow (2)</button>
+                </td>
+                <td>
+                    <button data-value="3">Green (3)</button>
+                </td>
+                <td>
+                    <button data-value="4">Brown (4)</button>
+                </td>
+                <td>
+                    <button data-value="5">Blue (5)</button>
+                </td>
+                <td>
+                    <button data-value="6">Pink (6)</button>
+                </td>
+                <td>
+                    <button data-value="7">Black (7)</button>
+                </td>
+            </tr>
+            <tr>
+                <th>Nomination</th>
+                <td><label>Yellow <input type="radio" name="nominate" value="2"></label></td>
+                <td><label>Green <input type="radio" name="nominate" value="3"></label></td>
+                <td><label>Brown <input type="radio" name="nominate" value="4"></label></td>
+                <td><label>Blue <input type="radio" name="nominate" value="5"></label></td>
+                <td><label>Pink <input type="radio" name="nominate" value="6"></label></td>
+                <td><label>Black <input type="radio" name="nominate" value="7"></label></td>
+            </tr>
+        </table>
+    </form>
 
+    <p>
+        <button id="foul-cue">Cue Ball Potted/Miss</button>
+    </p>
+    <p>
+        <button id="end-turn">End Turn (Legal)</button>
+    </p>
+
+</div>
 <script>
     const game = function() {
         let _isRedOn = true;
