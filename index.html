@@ -80,6 +80,15 @@
         #end-turn {
             padding: .5em 4em;
         }
+
+        #fullscreen {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+        }
+        :fullscreen #fullscreen {
+            display: none;
+        }
     </style>
     <script>
         // Wake lock handling.
@@ -172,6 +181,14 @@
     </p>
 
 </div>
+
+<button id="fullscreen">Fullscreen</button>
+
+<script>
+    document.querySelector(`#fullscreen`).addEventListener(`click`, () => {
+        document.documentElement.requestFullscreen();
+    });
+</script>
 <script>
     const game = function() {
         let _isRedOn = true;
