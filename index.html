@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Snooker Score</title>
     <style>
 
@@ -11,6 +11,9 @@
             --col-bg-score: #F9E431;
             --col-text-main: #eee;
             --col-text-score: var(--col-bg-main);
+
+            --turn-marker-width: 36px;
+            --turn-marker-height: calc(var(--turn-marker-width) / 2);
         }
 
         body {
@@ -24,7 +27,7 @@
             margin-bottom: 3rem;
             color: var(--col-text-main);
             background-color: var(--col-bg-main);
-            font-size: 1.2em;
+            font-size: 2em;
             line-height: 1.5;
             padding: 4px 0;
         }
@@ -32,17 +35,17 @@
             visibility: hidden;
             width: 0;
             height: 0;
-            border-top: 12px solid transparent;
-            border-bottom: 12px solid transparent;
+            border-top: var(--turn-marker-height) solid transparent;
+            border-bottom: var(--turn-marker-height) solid transparent;
             align-self: center;
         }
         #scoreboard #turn-marker-1 {
             margin-left: 6px;
-            border-left: 24px solid yellow;
+            border-left: var(--turn-marker-width) solid yellow;
         }
         #scoreboard #turn-marker-2 {
             margin-right: 6px;
-            border-right: 24px solid yellow;
+            border-right: var(--turn-marker-width) solid yellow;
         }
         #scoreboard.p1-strikes #turn-marker-1 {
             visibility: visible;
@@ -53,7 +56,9 @@
         #scoreboard input {
             color: var(--col-text-main);
             background-color: var(--col-bg-main);
+            font-size: .75em;
             font-weight: bold;
+            max-width: 10em;
         }
         .sb-player-score {
             color: var(--col-text-score);
@@ -67,7 +72,7 @@
             text-align: right;
         }
         #score-current-break {
-            font-size: 1rem;
+            font-size: .75em;
             width: 2.5em;
             text-align: center;
             align-self: center;
@@ -77,9 +82,30 @@
             width: 100%;
             border-spacing: 12px;
         }
+        td {
+            text-align: center;
+        }
+        td label {
+            display: inline-block;
+            padding: 1em;
+        }
 
+        .btn-ball {
+            padding: 1em;
+        }
+        button#foul-cue {
+            padding: .5em;
+        }
+
+        #end-turn-container {
+            position: fixed;
+            bottom: 1.5em;
+            display: flex;
+            justify-content: center;
+            width: 100%
+        }
         #end-turn {
-            padding: .5em 4em;
+            padding: 2em 6em;
             font-size: 1.2em;
         }
 
@@ -138,29 +164,29 @@
     <p>Reds remaining: <span id="redsRemaining"></span></p>
 
     <p>
-        <button id="btn-red" data-value="1">Red (1)</button>
+        <button id="btn-red" data-value="1" class="btn-ball">Red (1)</button>
     </p>
     <form id="nominate-form" onsubmit="return false;">
         <table>
             <tr>
                 <th>Colour</th>
                 <td>
-                    <button data-value="2" class="js-colorBtn">Yellow (2)</button>
+                    <button data-value="2" class="js-colorBtn btn-ball">Yellow (2)</button>
                 </td>
                 <td>
-                    <button data-value="3" class="js-colorBtn">Green (3)</button>
+                    <button data-value="3" class="js-colorBtn btn-ball">Green (3)</button>
                 </td>
                 <td>
-                    <button data-value="4" class="js-colorBtn">Brown (4)</button>
+                    <button data-value="4" class="js-colorBtn btn-ball">Brown (4)</button>
                 </td>
                 <td>
-                    <button data-value="5" class="js-colorBtn">Blue (5)</button>
+                    <button data-value="5" class="js-colorBtn btn-ball">Blue (5)</button>
                 </td>
                 <td>
-                    <button data-value="6" class="js-colorBtn">Pink (6)</button>
+                    <button data-value="6" class="js-colorBtn btn-ball">Pink (6)</button>
                 </td>
                 <td>
-                    <button data-value="7" class="js-colorBtn">Black (7)</button>
+                    <button data-value="7" class="js-colorBtn btn-ball">Black (7)</button>
                 </td>
             </tr>
             <tr>
@@ -178,9 +204,9 @@
     <p>
         <button id="foul-cue">Cue Ball Potted/Miss</button>
     </p>
-    <p>
+    <div id="end-turn-container">
         <button id="end-turn">End Turn (Legal)</button>
-    </p>
+    </div>
 
 </div>
 
