@@ -125,7 +125,7 @@
     <!-- Alternatively, "p2-strikes" -->
 
     <span id="turn-marker-1" class="turn-marker"></span>
-    <input type="text" value="Player 1"/>
+    <input type="text" value="Player 1" id="p1-name"/>
     <span id="score1" class="sb-player-score">0</span>
     <span id="score-current-break">(<span id="currentBreak">0</span>)</span>
     <span id="score2" class="sb-player-score">0</span>
@@ -189,6 +189,27 @@
 <script>
     document.querySelector(`#fullscreen`).addEventListener(`click`, () => {
         document.documentElement.requestFullscreen();
+    });
+</script>
+<script type="module">
+    // This block reads and stores player names to sessionStorage.
+    // Names survive page reloads. Useful as long as app doesn't have a Restart feature.
+    const keyNames = `snooker-score-names`;
+
+    const namesRaw = sessionStorage.getItem(keyNames);
+    if (namesRaw) {
+        const { p1, p2 } = JSON.parse(namesRaw);
+        document.querySelector(`#p1-name`).value = p1;
+        document.querySelector(`#p2-name`).value = p2;
+    }
+
+    document.querySelector(`#scoreboard`).addEventListener(`change`, e => {
+        if (e.target.tagName !== `INPUT`) return;
+
+        const p1 = document.querySelector(`#p1-name`).value;
+        const p2 = document.querySelector(`#p2-name`).value;
+
+        sessionStorage.setItem(keyNames, JSON.stringify({ p1, p2 }));
     });
 </script>
 <script>
