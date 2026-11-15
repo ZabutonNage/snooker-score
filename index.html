@@ -92,7 +92,41 @@
 
         .btn-ball {
             padding: 1em;
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
         }
+        .btn-ball.ball-red {
+            background-color: #ff010f;
+            color: #fff;
+        }
+        .btn-ball.ball-yellow {
+            background-color: #ffa600;
+        }
+        .btn-ball.ball-green {
+            background-color: #00645c;
+            color: #fff;
+        }
+        .btn-ball.ball-brown {
+            background-color: #963a0d;
+            color: #fff;
+        }
+        .btn-ball.ball-blue {
+            background-color: #035adf;
+            color: #fff;
+        }
+        .btn-ball.ball-pink {
+            background-color: #ff5f73;
+        }
+        .btn-ball.ball-black {
+            background-color: #000;
+            color: #fff;
+        }
+        .btn-ball:disabled {
+            background-color: rgba(239, 239, 239, 0.3);
+            color: rgba(16, 16, 16, 0.3);
+        }
+
         button#foul-cue {
             padding: .5em;
         }
@@ -164,29 +198,29 @@
     <p>Reds remaining: <span id="redsRemaining"></span></p>
 
     <p>
-        <button id="btn-red" data-value="1" class="btn-ball">Red (1)</button>
+        <button id="btn-red" data-value="1" class="btn-ball ball-red">Red</button>
     </p>
     <form id="nominate-form" onsubmit="return false;">
         <table>
             <tr>
                 <th>Colour</th>
                 <td>
-                    <button data-value="2" class="js-colorBtn btn-ball">Yellow (2)</button>
+                    <button data-value="2" class="js-colorBtn btn-ball ball-yellow">Yellow</button>
                 </td>
                 <td>
-                    <button data-value="3" class="js-colorBtn btn-ball">Green (3)</button>
+                    <button data-value="3" class="js-colorBtn btn-ball ball-green">Green</button>
                 </td>
                 <td>
-                    <button data-value="4" class="js-colorBtn btn-ball">Brown (4)</button>
+                    <button data-value="4" class="js-colorBtn btn-ball ball-brown">Brown</button>
                 </td>
                 <td>
-                    <button data-value="5" class="js-colorBtn btn-ball">Blue (5)</button>
+                    <button data-value="5" class="js-colorBtn btn-ball ball-blue">Blue</button>
                 </td>
                 <td>
-                    <button data-value="6" class="js-colorBtn btn-ball">Pink (6)</button>
+                    <button data-value="6" class="js-colorBtn btn-ball ball-pink">Pink</button>
                 </td>
                 <td>
-                    <button data-value="7" class="js-colorBtn btn-ball">Black (7)</button>
+                    <button data-value="7" class="js-colorBtn btn-ball ball-black">Black</button>
                 </td>
             </tr>
             <tr>
