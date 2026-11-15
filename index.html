@@ -143,6 +143,12 @@
             font-size: 1.2em;
         }
 
+        #panel-corrections {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+        }
+
         #fullscreen {
             position: fixed;
             bottom: 0;
@@ -244,9 +250,43 @@
 
 </div>
 
+<div id="panel-corrections">
+    <div>Corrections</div>
+    <button id="correct-reds">Reds</button>
+    <button id="correct-scoreP1">Score P1</button>
+    <button id="correct-scoreP2">Score P2</button>
+</div>
+
 <button id="fullscreen">Fullscreen</button>
 
 <script>
+    document.querySelector(`#correct-reds`).addEventListener(`click`, () => {
+        const newRemainingStr = prompt(`Set remaining reds. (Current: ${game.getRedsRemaining()})`);
+        const newRemaining = parseInt(newRemainingStr);
+
+        if (isNaN(newRemaining)) return;
+
+        game.correction.redsRemaining(newRemaining);
+        updateDisplay();
+    });
+    document.querySelector(`#correct-scoreP1`).addEventListener(`click`, () => {
+        const newScoreStr = prompt(`Set Player 1 score. (Current: ${game.scores.p1()})`);
+        const newScore = parseInt(newScoreStr);
+
+        if (isNaN(newScore)) return;
+
+        game.correction.scoreP1(newScore);
+        updateDisplay();
+    });
+    document.querySelector(`#correct-scoreP2`).addEventListener(`click`, () => {
+        const newScoreStr = prompt(`Set Player 2 score. (Current: ${game.scores.p2()})`);
+        const newScore = parseInt(newScoreStr);
+
+        if (isNaN(newScore)) return;
+
+        game.correction.scoreP2(newScore);
+        updateDisplay();
+    });
     document.querySelector(`#fullscreen`).addEventListener(`click`, () => {
         document.documentElement.requestFullscreen();
     });
@@ -329,6 +369,17 @@
             },
             isRedPhase: () => _isRedOn,
             isEndgame: () => _isEndgame,
+            correction: {
+                redsRemaining: remaining => {
+                    _redsRemaining = remaining;
+                },
+                scoreP1: score => {
+                    _score[1] = score;
+                },
+                scoreP2: score => {
+                    _score[2] = score;
+                },
+            },
         };
 
 
